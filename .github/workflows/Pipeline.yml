@@ -3,10 +3,8 @@ name: Pipeline
 on:
   push:
   workflow_dispatch:
-
-defaults:
-  run:
-    shell: bash
+  schedule:
+    - cron: '0 0 * * 5'
 
 jobs:
 
