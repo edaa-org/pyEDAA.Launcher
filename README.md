@@ -25,6 +25,24 @@
 [![Libraries.io SourceRank](https://img.shields.io/librariesio/sourcerank/pypi/pyEDAA.Launcher?longCache=true&style=flat-square)](https://libraries.io/github/edaa-org/pyEDAA.Launcher/sourcerank)
 -->
 
-<p align="center">
-  <a title="edaa-org.github.io/pyEDAA.Launcher" href="https://edaa-org.github.io/pyEDAA.Launcher"><img height="275px" src="doc/_static/work-in-progress.png"/></a>
-</p>
+
+# Main Goals
+TBD
+
+# Instalation
+TBD
+
+# Contributors
+
+* [Stefan Unrein](https://GitHub.com/stefanunrein) (Maintainer)
+* [Patrick Lehmann](https://GitHub.com/Paebbels) (Maintainer)
+* [Unai Martinez-Corral](https://GitHub.com/umarcor) (Maintainer)
+* [and more...](https://GitHub.com/edaa-org/pyEDAA.Launcher/graphs/contributors)
+
+# License
+
+This Python package (source code) licensed under [Apache License 2.0](LICENSE.md).  
+The accompanying documentation is licensed under [Creative Commons - Attribution 4.0 (CC-BY 4.0)](doc/Doc-License.rst).
+
+-------------------------
+SPDX-License-Identifier: Apache-2.0
