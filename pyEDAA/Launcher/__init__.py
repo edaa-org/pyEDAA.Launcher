@@ -35,7 +35,7 @@ def get_vivado_versions(install_path):
 
 def help():
     script_path = Path(sys.argv[0])
-    print(script_path)
+    print(f"Run-Path '{script_path}'")
     print()
     print(dedent("""\
         For using this VivadoManager please bind xpr extension to this executable with:
@@ -78,7 +78,7 @@ def main():
         print(f"Current path '{install_path}' has following Files/Folders in it:")
         for version in vivado_versions:
             print(version)
-            
+
         print("")
         print("Press any key to exit.")
         input()
