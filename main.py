@@ -1,16 +1,12 @@
 import sys
-import os
 import subprocess
 from pathlib import Path
+from textwrap import dedent
+import time
 
-# accept command line arguments
-inputArg1 = sys.argv[1]
-install_path = Path("C:\Xilinx\Vivado")
-sub_path = ["bin", "vivado.bat"]
-
-# print('inputArg1: ', inputArg1)
-
-file_path = Path(inputArg1)
+sub_path_bat  = Path("bin/vivado.bat")
+sub_path_vvgl = Path("bin/unwrapped/win64.o/vvgl.exe")
+match_line = "<!-- Product Version: Vivado v"
 
 
 def get_version(file_path):
@@ -18,7 +14,6 @@ def get_version(file_path):
         raise Exception(f"Vivado project file '{file_path!s}' not found.") from FileNotFoundError(f"File '{file_path!s}' not found.")
 
     project_file = file_path.open()
-    match_line = "<!-- Product Version: Vivado v"
 
     while True:
         line = project_file.readline()
@@ -35,26 +30,53 @@ def get_version(file_path):
 
 
 def get_vivado_versions(install_path):
-    my_list = os.listdir(install_path)
-    return my_list
+    return [directory.name for directory in install_path.iterdir()]
 
 
+def help():
+    script_path = Path(sys.argv[0])
+    print(script_path)
+    print()
+    print(dedent("""\
+        For using this VivadoManager please bind xpr extension to this executable with:
+        * Put this executable into the Vivado installation folder. E.g: c:\\Xilinx\\Vivado\\
+        * Change *.xpr association: right-click-> open-width-> VivadoManager.exe
+    """))
 
-file_version = get_version(file_path)
-# print(file_version)
 
-vivado_versions = get_vivado_versions(install_path)
-for version in vivado_versions:
-    if file_version == str(version):
-        # print("matching version:", file_version)
-        exec_path = os.path.join(install_path, file_version)
-        for i in sub_path:
-            exec_path = os.path.join(exec_path, i)
-        cmd = [exec_path, inputArg1]
-        # print(cmd)
+if len(sys.argv) > 1:
+    install_path = Path(sys.argv[0])
+    install_path = install_path.parent
+    inputArg1 = sys.argv[1]
+    file_path = Path(inputArg1)
 
-        subprocess.Popen(cmd)
-        exit()
+    file_version = get_version(file_path)
+    vivado_versions = get_vivado_versions(install_path)
 
-print("ERROR: Vivado Version " + file_version + " not available at path '" + os.path.join(install_path, file_version) + "'. Please start manually!")
-exit(-1)
+    for version in vivado_versions:
+        if file_version == str(version):
+            exec_path1 = install_path / file_version / sub_path_vvgl
+            exec_path2 = install_path / file_version / sub_path_bat
+            a = str(file_path)
+            cmd = [str(exec_path1), str(exec_path2), a]
+            subprocess.Popen(cmd, cwd=file_path.parent)#, creationflags=subprocess.DETACHED_PROCESS)
+            print("")
+            print(f"Open Project with Vivado Version {file_version}.")
+            time.sleep(2)
+            sys.exit(0)
+    else:
+        vivadoPath = install_path / file_version
+        print(f"ERROR: Vivado version {file_version} not available at path '{vivadoPath}'. Please start manually!")
+        print("")
+        print("Press any key to exit.")
+        input()
+        sys.exit(-1)
+
+else:
+    help()
+    print("")
+    print("Press any key to exit.")
+    input()
+    sys.exit(0)
+
+
