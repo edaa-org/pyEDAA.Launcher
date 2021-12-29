@@ -1,3 +1,41 @@
+# ==================================================================================================================== #
+#               _____ ____    _        _      ____            _           _   __  __           _      _                #
+#   _ __  _   _| ____|  _ \  / \      / \    |  _ \ _ __ ___ (_) ___  ___| |_|  \/  | ___   __| | ___| |               #
+#  | '_ \| | | |  _| | | | |/ _ \    / _ \   | |_) | '__/ _ \| |/ _ \/ __| __| |\/| |/ _ \ / _` |/ _ \ |               #
+#  | |_) | |_| | |___| |_| / ___ \  / ___ \ _|  __/| | | (_) | |  __/ (__| |_| |  | | (_) | (_| |  __/ |               #
+#  | .__/ \__, |_____|____/_/   \_\/_/   \_(_)_|   |_|  \___// |\___|\___|\__|_|  |_|\___/ \__,_|\___|_|               #
+#  |_|    |___/                                            |__/                                                        #
+# ==================================================================================================================== #
+# Authors:                                                                                                             #
+#   Stefan Unrein                                                                                                      #
+#                                                                                                                      #
+# License:                                                                                                             #
+# ==================================================================================================================== #
+# Copyright 2021-2022 Stefan Unrein - Endingen, Germany                                                                #
+#                                                                                                                      #
+# Licensed under the Apache License, Version 2.0 (the "License");                                                      #
+# you may not use this file except in compliance with the License.                                                     #
+# You may obtain a copy of the License at                                                                              #
+#                                                                                                                      #
+#   http://www.apache.org/licenses/LICENSE-2.0                                                                         #
+#                                                                                                                      #
+# Unless required by applicable law or agreed to in writing, software                                                  #
+# distributed under the License is distributed on an "AS IS" BASIS,                                                    #
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.                                             #
+# See the License for the specific language governing permissions and                                                  #
+# limitations under the License.                                                                                       #
+#                                                                                                                      #
+# SPDX-License-Identifier: Apache-2.0                                                                                  #
+# ==================================================================================================================== #
+#
+"""Start the correct Vivado Version based on xpr Version."""
+__author__ =    "Stefan Unrein"
+__email__ =     "stefan.unrein@gmx.net"
+__copyright__ = "2021-2022, Stefan Unrein"
+__license__ =   "Apache License, Version 2.0"
+__version__ =   "0.1.0"
+__keywords__ =  ["launcher", "version selector", "xilinx", "vivado"]
+
 import sys
 import subprocess
 from pathlib import Path
