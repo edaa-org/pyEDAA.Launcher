@@ -43,40 +43,50 @@ def help():
         * Change *.xpr association: right-click-> open-width-> VivadoManager.exe
     """))
 
+def main():
+    install_path = Path.cwd()
+    if len(sys.argv) > 1:
+        inputArg1 = sys.argv[1]
+        file_path = Path(inputArg1)
 
-if len(sys.argv) > 1:
-    install_path = Path(sys.argv[0])
-    install_path = install_path.parent
-    inputArg1 = sys.argv[1]
-    file_path = Path(inputArg1)
+        file_version = get_version(file_path)
+        vivado_versions = get_vivado_versions(install_path)
 
-    file_version = get_version(file_path)
-    vivado_versions = get_vivado_versions(install_path)
-
-    for version in vivado_versions:
-        if file_version == str(version):
-            exec_path1 = install_path / file_version / sub_path_vvgl
-            exec_path2 = install_path / file_version / sub_path_bat
-            a = str(file_path)
-            cmd = [str(exec_path1), str(exec_path2), a]
-            subprocess.Popen(cmd, cwd=file_path.parent)#, creationflags=subprocess.DETACHED_PROCESS)
+        for version in vivado_versions:
+            if file_version == str(version):
+                exec_path1 = install_path / file_version / sub_path_vvgl
+                exec_path2 = install_path / file_version / sub_path_bat
+                a = str(file_path)
+                cmd = [str(exec_path1), str(exec_path2), a]
+                subprocess.Popen(cmd, cwd=file_path.parent)#, creationflags=subprocess.DETACHED_PROCESS)
+                print("")
+                print(f"Open Project with Vivado Version {file_version}.")
+                time.sleep(2)
+                sys.exit(0)
+        else:
+            vivadoPath = install_path / file_version
+            print(f"ERROR: Vivado version {file_version} not available at path '{vivadoPath}'. Please start manually!")
             print("")
-            print(f"Open Project with Vivado Version {file_version}.")
-            time.sleep(2)
-            sys.exit(0)
+            print("Press any key to exit.")
+            input()
+            sys.exit(-1)
+
     else:
-        vivadoPath = install_path / file_version
-        print(f"ERROR: Vivado version {file_version} not available at path '{vivadoPath}'. Please start manually!")
+        help()
+
+        vivado_versions = get_vivado_versions(install_path)
+        print(f"Current path '{install_path}' has following Files/Folders in it:")
+        for version in vivado_versions:
+            print(version)
+            
         print("")
         print("Press any key to exit.")
         input()
-        sys.exit(-1)
+        sys.exit(0)
 
-else:
-    help()
-    print("")
-    print("Press any key to exit.")
-    input()
-    sys.exit(0)
+
+# entry point
+if __name__ == "__main__":
+    main()
 
 
