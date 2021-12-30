@@ -11,7 +11,7 @@
 #                                                                                                                      #
 # License:                                                                                                             #
 # ==================================================================================================================== #
-# Copyright 2021-2021 Patrick Lehmann - Boetzingen, Germany                                                            #
+# Copyright 2021-2022 Patrick Lehmann - Boetzingen, Germany                                                            #
 #                                                                                                                      #
 # Licensed under the Apache License, Version 2.0 (the "License");                                                      #
 # you may not use this file except in compliance with the License.                                                     #
@@ -28,7 +28,7 @@
 # SPDX-License-Identifier: Apache-2.0                                                                                  #
 # ==================================================================================================================== #
 #
-"""Package installer for ''."""
+"""Package installer for 'Start the correct Vivado Version based on version in `*.xpr`file.'."""
 from pathlib             import Path
 from pyTooling.Packaging import DescribePythonPackageHostedOnGitHub, DEFAULT_CLASSIFIERS
 
@@ -39,7 +39,7 @@ packageInformationFile = Path(f"{packageDirectory}/__init__.py")
 
 DescribePythonPackageHostedOnGitHub(
 	packageName=packageName,
-	description="Basic abstraction layer for executables.",
+	description="Start the correct Vivado Version based on version in `*.xpr`file.",
 	gitHubNamespace=gitHubNamespace,
 	sourceFileWithVersion=packageInformationFile,
 	developmentStatus="beta",
