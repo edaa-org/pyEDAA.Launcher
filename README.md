@@ -27,10 +27,21 @@
 
 
 # Main Goals
-TBD
+If one is using the Xilinx Vivado IDE, you will know that you can't just open the xpr project file with a double click if you have installed more then one Vivado version. This is because Xilinx has no Launcher which is checking the version of the project and passing the xpr to the correct Vivado Version. This project addresses exactly this problem.
 
-# Instalation
-TBD
+1. Check with which Vivado Version a xpr was created
+1. and pass the xpr to the correct Version.
+1. Now you can open every xpr just with a simple double click!
+1. It behaves exactly as you would open the xpr directly with Vivado itself. **With one exeption**: 
+   The working dir in Vivado is set to the xpr path and not to AppData, like it should be!
+
+# Installation
+* Copy the executable from the releases to the Vivado installation Path. For me its `C:\Xilinx\Vivado\`.
+* In this Path you should see the installation-folders of all Vivado Versions. E.g: 2018.3, 2019.1, ...
+* Change File-association: Right click on `*.xpr` -> open with -> choose another app -> and select the `VivadoLauncher.exe`
+* That's it.
+
+Note for Xilinx: Feel free to include this in the next release to stop this version madness. Please inform us then.
 
 # Contributors
 
