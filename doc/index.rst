@@ -30,17 +30,8 @@
 The pyEDAA.Launcher Documentation
 #################################
 
-.. image:: _static/work-in-progress.png
-   :height: 275 px
-   :align: center
-   :target: https://GitHub.com/edaa-org/pyEDAA.Launcher
-
-.. raw:: html
-
-    <br>
-
-
-one-liner TBD
+**pyEDAA.Launcher** starts the correct Xilinx Vivado version based on the version number written into the ``*.xpr`` file.
+If no suitable version was found, an error message is shown.
 
 
 .. _goals:
@@ -48,7 +39,27 @@ one-liner TBD
 Main Goals
 **********
 
-tbd
+When opening Xilinx Vivado by double-clicking an ``*.xpr`` file in the Windows Explorer, a default Vivado version is
+launched by Windows. In many cases, this is the first Vivado version that was installed on a system, but not the latest
+version. Anyhow, in most cases, Windows starts the wrong Vivado version, which leeds to a project upgrade question, or a
+rejection, because the project file is too new.
+
+**pyEDAA.Launcher** addresses exactly this problem. It will start the correct Xilinx Vivado installation with correct
+working directory settings, if that requested Vivado version is found on the system.
+
+How does it work?
+=================
+
+1. Check with which Vivado version was used to save the ``*.xpr`` file.
+2. Scan the Xilinx installation directory for available Vivado versions.
+3. If a matching version was found, start Vivado and pass the ``*.xpr`` as a parameter.
+
+Differences to opening the ``*.xpr`` from GUI?
+==============================================
+
+By default, Xilinx Vivado has its working directory in ``AppData``, but the working directory should be in the directory
+where the ``*.xpr`` file is located. This is fixed by **pyEDAA.Launcher** as a side effect. Now, Vivado saves log and
+journal files to the correct locations.
 
 
 .. _usecase:
@@ -56,7 +67,7 @@ tbd
 Use Cases
 *********
 
-* tbd
+* Handle multiple parallel Xilinx Vivado installations.
 
 
 .. _news:
