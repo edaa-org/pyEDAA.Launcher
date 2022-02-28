@@ -43,11 +43,14 @@ from textwrap import dedent
 import time
 from typing import NoReturn
 
+from pyTooling.Decorators import export
+
 sub_path_bat  = Path("bin/vivado.bat")
 sub_path_vvgl = Path("bin/unwrapped/win64.o/vvgl.exe")
 match_line = "<!-- Product Version: Vivado v"
 
 
+@export
 def get_version(file_path):
 	if not file_path.exists():
 		raise Exception(f"Vivado project file '{file_path}' not found.") from FileNotFoundError(f"File '{file_path}' not found.")
@@ -68,10 +71,12 @@ def get_version(file_path):
 	return str(version_major + "." + version_minor)
 
 
+@export
 def get_vivado_versions(install_path):
 	return [item.name for item in install_path.iterdir() if item.is_dir()]
 
 
+@export
 def PrintHelp(script_path: Path) -> None:
 	print(dedent(f"""\
 		Run-Path '{script_path}'
@@ -82,6 +87,7 @@ def PrintHelp(script_path: Path) -> None:
 	"""))
 
 
+@export
 def main() -> NoReturn:
 	install_path = Path.cwd()
 	script_path = Path(sys.argv[0])
