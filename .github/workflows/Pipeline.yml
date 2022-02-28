@@ -9,26 +9,20 @@ on:
 jobs:
 
   Params:
-    uses: pyTooling/Actions/.github/workflows/Parameters.yml@r0
+    uses: pyTooling/Actions/.github/workflows/Parameters.yml@typing-junit
     with:
       name: pyEDAA.Launcher
 
   UnitTesting:
-    uses: pyTooling/Actions/.github/workflows/UnitTesting.yml@r0
+    uses: pyTooling/Actions/.github/workflows/UnitTesting.yml@typing-junit
     needs:
       - Params
     with:
       jobs: ${{ needs.Params.outputs.python_jobs }}
-      pacboy: >-
-        msys/git
-        python-pip:p
-        python-wheel:p
-        python-coverage:p
-        python-lxml:p
       artifact: ${{ fromJson(needs.Params.outputs.params).artifacts.unittesting }}
 
   Coverage:
-    uses: pyTooling/Actions/.github/workflows/CoverageCollection.yml@r0
+    uses: pyTooling/Actions/.github/workflows/CoverageCollection.yml@typing-junit
     needs:
       - Params
     with:
@@ -38,7 +32,7 @@ jobs:
       codacy_token: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
   StaticTypeCheck:
-    uses: pyTooling/Actions/.github/workflows/StaticTypeCheck.yml@r0
+    uses: pyTooling/Actions/.github/workflows/StaticTypeCheck.yml@typing-junit
     needs:
       - Params
     with:
@@ -46,14 +40,17 @@ jobs:
       requirements: '-r tests/requirements.txt'
       commands: |
         cd pyEDAA
-        mypy --html-report ../htmlmypy -p Launcher
-      report: 'htmlmypy'
-      artifact: ${{ fromJson(needs.Params.outputs.params).artifacts.typing }}
+        mypy --junit-xml StaticTypingSummary.xml --html-report ../htmlmypy -p Launcher
+      html_report: 'htmlmypy'
+      html_artifact: ${{ fromJson(needs.Params.outputs.params).artifacts.typing_html }}
+      junit_report: 'StaticTypingSummary.xml'
+      junit_artifact: ${{ fromJson(needs.Params.outputs.params).artifacts.typing_junit }}
 
   PublishTestResults:
-    uses: pyTooling/Actions/.github/workflows/PublishTestResults.yml@r0
+    uses: pyTooling/Actions/.github/workflows/PublishTestResults.yml@typing-junit
     needs:
       - UnitTesting
+      - StaticTypeCheck
 
   Package:
     uses: pyTooling/Actions/.github/workflows/Package.yml@isolation-modes
@@ -65,7 +62,7 @@ jobs:
       artifact: ${{ fromJson(needs.Params.outputs.params).artifacts.package }}
 
   Release:
-    uses: pyTooling/Actions/.github/workflows/Release.yml@r0
+    uses: pyTooling/Actions/.github/workflows/Release.yml@typing-junit
     if: startsWith(github.ref, 'refs/tags')
     needs:
       - UnitTesting
@@ -74,7 +71,7 @@ jobs:
       - Package
 
   PublishOnPyPI:
-    uses: pyTooling/Actions/.github/workflows/PublishOnPyPI.yml@r0
+    uses: pyTooling/Actions/.github/workflows/PublishOnPyPI.yml@typing-junit
     if: startsWith(github.ref, 'refs/tags')
     needs:
       - Params
@@ -88,14 +85,14 @@ jobs:
       PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
 
 #  VerifyDocs:
-#    uses: pyTooling/Actions/.github/workflows/VerifyDocs.yml@r0
+#    uses: pyTooling/Actions/.github/workflows/VerifyDocs.yml@typing-junit
 #    needs:
 #      - Params
 #    with:
 #      python_version: ${{ fromJson(needs.Params.outputs.params).python_version }}
 
   BuildTheDocs:
-    uses: pyTooling/Actions/.github/workflows/BuildTheDocs.yml@r0
+    uses: pyTooling/Actions/.github/workflows/BuildTheDocs.yml@typing-junit
     needs:
       - Params
 #      - VerifyDocs
@@ -103,7 +100,7 @@ jobs:
       artifact: ${{ fromJson(needs.Params.outputs.params).artifacts.doc }}
 
   PublishToGitHubPages:
-    uses: pyTooling/Actions/.github/workflows/PublishToGitHubPages.yml@r0
+    uses: pyTooling/Actions/.github/workflows/PublishToGitHubPages.yml@typing-junit
     needs:
       - Params
       - BuildTheDocs
@@ -115,7 +112,7 @@ jobs:
       typing: ${{ fromJson(needs.Params.outputs.params).artifacts.typing }}
 
   ArtifactCleanUp:
-    uses: pyTooling/Actions/.github/workflows/ArtifactCleanUp.yml@r0
+    uses: pyTooling/Actions/.github/workflows/ArtifactCleanUp.yml@typing-junit
     needs:
       - Params
       - UnitTesting
