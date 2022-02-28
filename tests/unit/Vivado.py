@@ -32,12 +32,13 @@
 from pathlib              import Path
 from unittest             import TestCase
 
-from pyEDAA.Launcher import get_version
+from pyEDAA.Launcher import Program
 
 
 class ReadXPRFile(TestCase):
 	def test_ExtractVersionFromXPRFile(self):
 		xprFilePath = Path("StopWatch.xpr")
-		version = get_version(xprFilePath)
+		program = Program(xprFilePath)
+		version = program.GetVersion()
 
 		self.assertEqual("2021.2", version)

@@ -54,20 +54,20 @@ How does it work?
 2. Scan the Xilinx installation directory for available Vivado versions.
 3. If a matching version was found, start Vivado and pass the ``*.xpr`` as a parameter.
 
-Differences to opening the ``*.xpr`` from GUI?
-==============================================
+Differences to opening the ``*.xpr`` from within Vivado GUI?
+============================================================
 
 By default, Xilinx Vivado has its working directory in ``AppData``, but the working directory should be in the directory
 where the ``*.xpr`` file is located. This is fixed by **pyEDAA.Launcher** as a side effect. Now, Vivado saves log and
 journal files to the correct locations.
 
 
-.. _usecase:
+.. #_usecase:
 
-Use Cases
-*********
+   Use Cases
+   *********
 
-* Handle multiple parallel Xilinx Vivado installations.
+   * Handle multiple parallel Xilinx Vivado installations.
 
 
 .. _news:
