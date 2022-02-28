@@ -40,7 +40,7 @@ jobs:
       requirements: '-r tests/requirements.txt'
       commands: |
         cd pyEDAA
-        mypy --junit-xml StaticTypingSummary.xml --html-report ../htmlmypy -p Launcher
+        mypy --junit-xml ../StaticTypingSummary.xml --html-report ../htmlmypy -p Launcher
       html_report: 'htmlmypy'
       html_artifact: ${{ fromJson(needs.Params.outputs.params).artifacts.typing_html }}
       junit_report: 'StaticTypingSummary.xml'

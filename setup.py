@@ -28,7 +28,7 @@
 # SPDX-License-Identifier: Apache-2.0                                                                                  #
 # ==================================================================================================================== #
 #
-"""Package installer for 'Start the correct Vivado Version based on version in `*.xpr`file.'."""
+"""Package installer for 'Start the correct Vivado Version based on version in ``*.xpr`` file.'."""
 from pathlib             import Path
 from pyTooling.Packaging import DescribePythonPackageHostedOnGitHub, DEFAULT_CLASSIFIERS
 
@@ -39,7 +39,7 @@ packageInformationFile = Path(f"{packageDirectory}/__init__.py")
 
 DescribePythonPackageHostedOnGitHub(
 	packageName=packageName,
-	description="Start the correct Vivado Version based on version in `*.xpr`file.",
+	description="Start the correct Vivado Version based on version in '*.xpr' file.",
 	gitHubNamespace=gitHubNamespace,
 	sourceFileWithVersion=packageInformationFile,
 	developmentStatus="beta",

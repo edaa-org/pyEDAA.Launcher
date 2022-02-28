@@ -30,6 +30,7 @@ exclude_lines = [
 ]
 
 [tool.coverage.html]
+title = "pyEDAA.Launcher"
 directory = "report/coverage/html"
 
 [tool.coverage.xml]
