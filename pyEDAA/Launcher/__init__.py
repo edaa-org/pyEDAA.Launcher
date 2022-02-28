@@ -41,6 +41,7 @@ import subprocess
 from pathlib import Path
 from textwrap import dedent
 import time
+from typing import NoReturn
 
 sub_path_bat  = Path("bin/vivado.bat")
 sub_path_vvgl = Path("bin/unwrapped/win64.o/vvgl.exe")
@@ -68,21 +69,23 @@ def get_version(file_path):
 
 
 def get_vivado_versions(install_path):
-	return [directory.name for directory in install_path.iterdir()]
+	return [item.name for item in install_path.iterdir() if item.is_dir()]
 
 
-def help():
-	script_path = Path(sys.argv[0])
-	print(f"Run-Path '{script_path}'")
-	print()
-	print(dedent("""\
-			For using this VivadoManager please bind xpr extension to this executable with:
-			* Put this executable into the Vivado installation folder. E.g: c:\\Xilinx\\Vivado\\
-			* Change *.xpr association: right-click-> open-width-> VivadoManager.exe
+def PrintHelp(script_path: Path) -> None:
+	print(dedent(f"""\
+		Run-Path '{script_path}'
+
+		For using this VivadoManager please bind xpr extension to this executable with:
+		* Put this executable into the Vivado installation folder. E.g: c:\\Xilinx\\Vivado\\
+		* Change *.xpr association: right-click-> open-width-> VivadoManager.exe
 	"""))
 
-def main():
+
+def main() -> NoReturn:
 	install_path = Path.cwd()
+	script_path = Path(sys.argv[0])
+
 	if len(sys.argv) > 1:
 		inputArg1 = sys.argv[1]
 		file_path = Path(inputArg1)
@@ -103,26 +106,32 @@ def main():
 				sys.exit(0)
 		else:
 			vivadoPath = install_path / file_version
-			print(f"ERROR: Vivado version {file_version} not available at path '{vivadoPath}'. Please start manually!")
-			print("")
-			print("Press any key to exit.")
+			print(dedent(f"""\
+				ERROR: Vivado version {file_version} not available at path '{vivadoPath}'. Please start manually!
+
+				Press any key to exit.
+			"""))
+
+			# wait on user interaction
 			input()
-			sys.exit(-1)
+			sys.exit(1)
 
 	else:
-		help()
+		PrintHelp(script_path)
 
 		vivado_versions = get_vivado_versions(install_path)
-		print(f"Current path '{install_path}' has following Files/Folders in it:")
+		print(f"Current path '{install_path}' has following files/folders in it:")
 		for version in vivado_versions:
 			print(version)
 
 		print("")
 		print("Press any key to exit.")
+
+		# wait on user interaction
 		input()
 		sys.exit(0)
 
 
-# entry point
+# Entry point
 if __name__ == "__main__":
 		main()
