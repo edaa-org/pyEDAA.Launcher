@@ -7,23 +7,31 @@ from os.path import abspath
 from pathlib import Path
 from json import loads
 
+from pyTooling.Packaging import extractVersionInformation
 
 ROOT = Path(__file__).resolve().parent
 
 sys_path.insert(0, abspath('.'))
 sys_path.insert(0, abspath('..'))
+sys_path.insert(0, abspath('../pyEDAA/Launcher'))
+#sys_path.insert(0, abspath('_extensions'))
 
 
 # ==============================================================================
-# Project information
+# Project information and versioning
 # ==============================================================================
-project =   "pyEDAA.Launcher"
-copyright = "2021-2022 Patrick Lehmann - Boetzingen, Germany"
-author =    "Patrick Lehmann"
+# The version info for the project you're documenting, acts as replacement for
+# |version| and |release|, also used in various other places throughout the
+# built documents.
+project =     "pyEDAA.Launcher"
 
-version = "latest"     # The short X.Y version.
-release = "latest"   # The full version, including alpha/beta/rc tags.
+packageInformationFile = Path(f"../{project.replace('.', '/')}/__init__.py")
+versionInformation = extractVersionInformation(packageInformationFile)
 
+author =    versionInformation.Author
+copyright = versionInformation.Copyright
+version =   ".".join(versionInformation.Version.split(".")[:2])  # e.g. 2.3    The short X.Y version.
+release =   versionInformation.Version
 
 # ==============================================================================
 # Miscellaneous settings
@@ -86,7 +94,7 @@ else:
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-html_logo = str(Path(html_static_path[0]) / "logo.svg")
+html_logo = str(Path(html_static_path[0]) / "logo_on_dark.svg")
 html_favicon = str(Path(html_static_path[0]) / "favicon.svg")
 
 # Output file base name for HTML help builder.
@@ -149,8 +157,22 @@ latex_documents = [
 # Extensions
 # ==============================================================================
 extensions = [
+# Standard Sphinx extensions
+	"sphinx.ext.autodoc",
 	'sphinx.ext.extlinks',
 	'sphinx.ext.intersphinx',
+	'sphinx.ext.inheritance_diagram',
+	'sphinx.ext.todo',
+	'sphinx.ext.graphviz',
+	'sphinx.ext.mathjax',
+	'sphinx.ext.ifconfig',
+	'sphinx.ext.viewcode',
+# SphinxContrib extensions
+	'sphinxcontrib.mermaid',
+# Other extensions
+	'sphinx_fontawesome',
+	'sphinx_autodoc_typehints',
+	'autoapi.sphinx',
 ]
 
 
@@ -163,10 +185,51 @@ intersphinx_mapping = {
 
 
 # ==============================================================================
+# Sphinx.Ext.AutoDoc
+# ==============================================================================
+# see: https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#configuration
+autodoc_default_options = {
+	"private-members": True,
+	"special-members": True,
+	"inherited-members": True,
+	"exclude-members": "__weakref__"
+}
+#autodoc_class_signature = "separated"
+autodoc_member_order = "bysource"       # alphabetical, groupwise, bysource
+autodoc_typehints = "both"
+#autoclass_content = "both"
+
+
+
+# ==============================================================================
 # Sphinx.Ext.ExtLinks
 # ==============================================================================
 extlinks = {
-	'ghissue': ('https://GitHub.com/edaa-org/pyEDAA.Launcher/issues/%s', 'issue #'),
-	'ghpull':  ('https://GitHub.com/edaa-org/pyEDAA.Launcher/pull/%s', 'pull request #'),
-	'ghsrc':   ('https://GitHub.com/edaa-org/pyEDAA.Launcher/blob/main/%s', ''),
+	"ghissue": ('https://GitHub.com/edaa-org/pyEDAA.Launcher/issues/%s', 'issue #'),
+	"ghpull":  ('https://GitHub.com/edaa-org/pyEDAA.Launcher/pull/%s', 'pull request #'),
+	"ghsrc":   ('https://GitHub.com/edaa-org/pyEDAA.Launcher/blob/main/%s?ts=2', None),
+}
+
+
+# ==============================================================================
+# Sphinx.Ext.Graphviz
+# ==============================================================================
+graphviz_output_format = "svg"
+
+
+
+# ==============================================================================
+# Sphinx.Ext.ToDo
+# ==============================================================================
+# If true, `todo` and `todoList` produce output, else they produce nothing.
+todo_include_todos = True
+todo_link_only = True
+
+
+
+# ==============================================================================
+# AutoAPI.Sphinx
+# ==============================================================================
+autoapi_modules = {
+  'pyEDAA.Launcher':  {'output': "pyEDAA.Launcher", "override": True}
 }
