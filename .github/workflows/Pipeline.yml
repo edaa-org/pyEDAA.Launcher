@@ -53,7 +53,7 @@ jobs:
       - StaticTypeCheck
 
   Package:
-    uses: pyTooling/Actions/.github/workflows/Package.yml@isolation-modes
+    uses: pyTooling/Actions/.github/workflows/Package.yml@r0
     needs:
       - Params
       - Coverage
