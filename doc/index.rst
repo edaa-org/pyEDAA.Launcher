@@ -30,17 +30,160 @@
 The pyEDAA.Launcher Documentation
 #################################
 
-.. image:: _static/work-in-progress.png
-   :height: 275 px
-   :align: center
-   :target: https://GitHub.com/edaa-org/pyEDAA.Launcher
+**pyEDAA.Launcher** starts the correct Xilinx Vivado version based on the version number written into the ``*.xpr`` file.
+If no suitable version was found, an error message is shown.
 
-.. raw:: html
 
-    <br>
+.. _goals:
+
+Main Goals
+**********
+
+When opening Xilinx Vivado by double-clicking an ``*.xpr`` file in the Windows Explorer, a default Vivado version is
+launched by Windows. In many cases, this is the first Vivado version that was installed on a system, but not the latest
+version. Anyhow, in most cases, Windows starts the wrong Vivado version, which leeds to a project upgrade question, or a
+rejection, because the project file is too new.
+
+**pyEDAA.Launcher** addresses exactly this problem. It will start the correct Xilinx Vivado installation with correct
+working directory settings, if that requested Vivado version is found on the system.
+
+How does it work?
+=================
+
+1. Check with which Vivado version was used to save the ``*.xpr`` file.
+2. Scan the Xilinx installation directory for available Vivado versions.
+3. If a matching version was found, start Vivado and pass the ``*.xpr`` as a parameter.
+
+Differences to opening the ``*.xpr`` from within Vivado GUI?
+============================================================
+
+By default, Xilinx Vivado has its working directory in ``AppData``, but the working directory should be in the directory
+where the ``*.xpr`` file is located. This is fixed by **pyEDAA.Launcher** as a side effect. Now, Vivado saves log and
+journal files to the correct locations.
+
+
+.. #_usecase:
+
+   Use Cases
+   *********
+
+   * Handle multiple parallel Xilinx Vivado installations.
+
+
+.. _news:
+
+News
+****
+
+.. only:: html
+
+   Feb. 2022 - Documentation und Unit Test Enhancements
+   ====================================================
+
+.. only:: latex
+
+   .. rubric:: Documentation und Unit Test Enhancements
+
+* Updated documentation.
+* Added simple unit tests.
+
+
+.. only:: html
+
+   Dec. 2021 - Initial Prototype
+   =============================
+
+.. only:: latex
+
+   .. rubric:: Initial Prototype
+
+* Development of a simple script to start the correct Vivado installation by reading the version from ``*.xpr`` file.
+
+
+.. _contributors:
+
+Contributors
+************
+
+* `Patrick Lehmann <https://GitHub.com/Paebbels>`__ (Maintainer)
+* `Stefan Unrein <https://GitHub.com/stefanunrein/>`__
+* `Unai Martinez-Corral <https://GitHub.com/umarcor/>`__
+* `and more... <https://GitHub.com/VHDL/pyVHDLModel/graphs/contributors>`__
+
+
+License
+*******
+
+.. only:: html
+
+   This Python package (source code) is licensed under `Apache License 2.0 <Code-License.html>`__. |br|
+   The accompanying documentation is licensed under `Creative Commons - Attribution 4.0 (CC-BY 4.0) <Doc-License.html>`__.
+
+.. only:: latex
+
+   This Python package (source code) is licensed under **Apache License 2.0**. |br|
+   The accompanying documentation is licensed under **Creative Commons - Attribution 4.0 (CC-BY 4.0)**.
+
+------------------------------------
+
+.. |docdate| date:: %d.%b %Y - %H:%M
+
+.. only:: html
+
+   This document was generated on |docdate|.
 
 
 .. toctree::
    :hidden:
 
    Used as a layer of EDA² ➚ <https://edaa-org.github.io/>
+
+
+.. toctree::
+   :caption: Introduction
+   :hidden:
+
+   Installation
+   Dependency
+   Usage
+
+
+.. raw:: latex
+
+   \part{Main Documentation}
+
+.. #toctree::
+   :caption: Main Documentation
+   :hidden:
+
+   LanguageModel/index
+
+
+.. raw:: latex
+
+   \part{References}
+
+.. toctree::
+   :caption: References
+   :hidden:
+
+   pyEDAA.Launcher/index
+
+
+.. raw:: latex
+
+   \part{Appendix}
+
+.. toctree::
+   :caption: Appendix
+   :hidden:
+
+   Coverage Report ➚ <coverage/index>
+   Static Type Check Report ➚ <typing/index>
+   License
+   Doc-License
+   Glossary
+   genindex
+
+.. #
+   py-modindex

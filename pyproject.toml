@@ -1,8 +1,8 @@
 [build-system]
 requires = [
-    "pyTooling >= 1.9.4",
-    "setuptools >= 35.0.2",
-    "wheel >= 0.29.0"
+    "pyTooling >= 2.0.1",
+    "setuptools >= 60.9.3",
+    "wheel >= 0.37.1"
 ]
 build-backend = "setuptools.build_meta"
 
@@ -30,6 +30,7 @@ exclude_lines = [
 ]
 
 [tool.coverage.html]
+title = "pyEDAA.Launcher"
 directory = "report/coverage/html"
 
 [tool.coverage.xml]

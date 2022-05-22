@@ -25,23 +25,39 @@
 [![Libraries.io SourceRank](https://img.shields.io/librariesio/sourcerank/pypi/pyEDAA.Launcher?longCache=true&style=flat-square)](https://libraries.io/github/edaa-org/pyEDAA.Launcher/sourcerank)
 -->
 
+**pyEDAA.Launcher** starts the correct Xilinx Vivado version based on the version number written into the ``*.xpr`` file.
+If no suitable version was found, an error message is shown.
 
 # Main Goals
-If one is using the Xilinx Vivado IDE, you will know that you can't just open the xpr project file with a double click if you have installed more then one Vivado version. This is because Xilinx has no Launcher which is checking the version of the project and passing the xpr to the correct Vivado Version. This project addresses exactly this problem.
 
-1. Check with which Vivado Version a xpr was created
-1. and pass the xpr to the correct Version.
-1. Now you can open every xpr just with a simple double click!
-1. It behaves exactly as you would open the xpr directly with Vivado itself. **With one exeption**: 
-   The working dir in Vivado is set to the xpr path and not to AppData, like it should be!
+When opening Xilinx Vivado by double-clicking an ``*.xpr`` file in the Windows Explorer, a default Vivado version is
+launched by Windows. In many cases, this is the first Vivado version that was installed on a system, but not the latest
+version. Anyhow, in most cases, Windows starts the wrong Vivado version, which leeds to a project upgrade question, or a
+rejection, because the project file is too new.
 
-# Installation
-* Copy the executable from the releases to the Vivado installation Path. For me its `C:\Xilinx\Vivado\`.
-* In this Path you should see the installation-folders of all Vivado Versions. E.g: 2018.3, 2019.1, ...
-* Change File-association: Right click on `*.xpr` -> open with -> choose another app -> and select the `VivadoLauncher.exe`
-* That's it.
+**pyEDAA.Launcher** addresses exactly this problem. It will start the correct Xilinx Vivado installation with correct
+working directory settings, if that requested Vivado version is found on the system.
 
-Note for Xilinx: Feel free to include this in the next release to stop this version madness. Please inform us then.
+## How does it work?
+
+1. Check with which Vivado version was used to save the ``*.xpr`` file.
+2. Scan the Xilinx installation directory for available Vivado versions.
+3. If a matching version was found, start Vivado and pass the ``*.xpr`` as a parameter.
+
+## Differences to opening the ``*.xpr`` from GUI?
+ 
+By default, Xilinx Vivado has its working directory in ``AppData``, but the working directory should be in the directory
+where the ``*.xpr`` file is located. This is fixed by **pyEDAA.Launcher** as a side effect. Now, Vivado saves log and
+journal files to the correct locations.
+
+
+> # Installation
+> * Copy the executable from the releases to the Vivado installation Path. For me its `C:\Xilinx\Vivado\`.
+> * In this Path you should see the installation-folders of all Vivado Versions. E.g: 2018.3, 2019.1, ...
+> * Change File-association: Right click on `*.xpr` -> open with -> choose another app -> and select the `VivadoLauncher.exe`
+> * That's it.
+
+> Note for Xilinx: Feel free to include this in the next release to stop this version madness. Please inform us then.
 
 # Contributors
 
