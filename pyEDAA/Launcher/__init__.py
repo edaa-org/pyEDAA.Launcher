@@ -12,7 +12,7 @@
 #                                                                                                                      #
 # License:                                                                                                             #
 # ==================================================================================================================== #
-# Copyright 2021-2022 Stefan Unrein - Endingen, Germany                                                                #
+# Copyright 2021-2023 Stefan Unrein - Endingen, Germany                                                                #
 #                                                                                                                      #
 # Licensed under the Apache License, Version 2.0 (the "License");                                                      #
 # you may not use this file except in compliance with the License.                                                     #
@@ -32,7 +32,7 @@
 """Start the correct Vivado Version based on version in `*.xpr`file."""
 __author__ =    "Stefan Unrein"
 __email__ =     "stefan.unrein@gmx.net"
-__copyright__ = "2021-2022, Stefan Unrein"
+__copyright__ = "2021-2023, Stefan Unrein"
 __license__ =   "Apache License, Version 2.0"
 __version__ =   "0.1.0"
 __keywords__ =  ["launcher", "version selector", "xilinx", "vivado"]
