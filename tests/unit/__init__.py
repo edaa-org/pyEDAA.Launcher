@@ -7,11 +7,11 @@
 # |_|    |___/                                                                                                         #
 # ==================================================================================================================== #
 # Authors:                                                                                                             #
-#   Stefan Unrein                                                                                                      #
+#   Patrick Lehmann                                                                                                    #
 #                                                                                                                      #
 # License:                                                                                                             #
 # ==================================================================================================================== #
-# Copyright 2021-2023 Stefan Unrein - Endingen, Germany                                                                #
+# Copyright 2017-2023 Patrick Lehmann - Bötzingen, Germany                                                             #
 #                                                                                                                      #
 # Licensed under the Apache License, Version 2.0 (the "License");                                                      #
 # you may not use this file except in compliance with the License.                                                     #
@@ -28,22 +28,4 @@
 # SPDX-License-Identifier: Apache-2.0                                                                                  #
 # ==================================================================================================================== #
 #
-"""Package installer for 'Start the correct Vivado Version based on version in ``*.xpr`` file.'."""
-from pathlib             import Path
-from pyTooling.Packaging import DescribePythonPackageHostedOnGitHub, DEFAULT_CLASSIFIERS
-
-gitHubNamespace =        "edaa-org"
-packageName =            "pyEDAA.Launcher"
-packageDirectory =       packageName.replace(".", "/")
-packageInformationFile = Path(f"{packageDirectory}/__init__.py")
-
-DescribePythonPackageHostedOnGitHub(
-	packageName=packageName,
-	description="Start the correct Vivado Version based on version in '*.xpr' file.",
-	gitHubNamespace=gitHubNamespace,
-	sourceFileWithVersion=packageInformationFile,
-	developmentStatus="beta",
-	classifiers=list(DEFAULT_CLASSIFIERS) + [
-		"Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
-	]
-)
+"""Helper classes for unit tests."""
