@@ -12,7 +12,7 @@
 #                                                                                                                      #
 # License:                                                                                                             #
 # ==================================================================================================================== #
-# Copyright 2021-2023 Stefan Unrein - Endingen, Germany                                                                #
+# Copyright 2021-2024 Stefan Unrein - Endingen, Germany                                                                #
 #                                                                                                                      #
 # Licensed under the Apache License, Version 2.0 (the "License");                                                      #
 # you may not use this file except in compliance with the License.                                                     #
@@ -32,7 +32,7 @@
 """Start the correct Vivado Version based on version in `*.xpr`file."""
 __author__ =    "Stefan Unrein"
 __email__ =     "stefan.unrein@gmx.net"
-__copyright__ = "2021-2023, Stefan Unrein"
+__copyright__ = "2021-2024, Stefan Unrein"
 __license__ =   "Apache License, Version 2.0"
 __version__ =   "0.1.0"
 __keywords__ =  ["launcher", "version selector", "xilinx", "vivado"]
@@ -79,7 +79,7 @@ class Program:
 		:returns: Used Vivado version to save the given ``*.xpr`` file.
 		:raises Exception: When the version information isn't found in the file.
 		"""
-		with self._projectFilePath.open("r") as file:
+		with self._projectFilePath.open("r", encoding="utf-8") as file:
 			for line in file:
 				match = self.versionLineRegExp.match(line)
 				if match is not None:

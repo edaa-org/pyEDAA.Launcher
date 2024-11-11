@@ -100,7 +100,7 @@ News
 * Development of a simple script to start the correct Vivado installation by reading the version from ``*.xpr`` file.
 
 
-.. _contributors:
+.. _CONTRIBUTORS:
 
 Contributors
 ************
@@ -110,6 +110,8 @@ Contributors
 * `Unai Martinez-Corral <https://GitHub.com/umarcor/>`__
 * `and more... <https://GitHub.com/VHDL/pyVHDLModel/graphs/contributors>`__
 
+
+.. _LICENSE:
 
 License
 *******
