@@ -29,6 +29,8 @@
 # ==================================================================================================================== #
 #
 """Package installer for 'Start the correct Vivado Version based on version in ``*.xpr`` file.'."""
+from setuptools          import setup
+
 from pathlib             import Path
 from pyTooling.Packaging import DescribePythonPackageHostedOnGitHub, DEFAULT_CLASSIFIERS
 
@@ -37,7 +39,7 @@ packageName =            "pyEDAA.Launcher"
 packageDirectory =       packageName.replace(".", "/")
 packageInformationFile = Path(f"{packageDirectory}/__init__.py")
 
-DescribePythonPackageHostedOnGitHub(
+setup(**DescribePythonPackageHostedOnGitHub(
 	packageName=packageName,
 	description="Start the correct Vivado Version based on version in '*.xpr' file.",
 	gitHubNamespace=gitHubNamespace,
@@ -46,7 +48,10 @@ DescribePythonPackageHostedOnGitHub(
 	classifiers=list(DEFAULT_CLASSIFIERS) + [
 		"Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
 	],
+	dataFiles={
+		packageName: ["py.typed"]
+	},
 	consoleScripts={
 		"pyedaa-launcher": "pyEDAA.Launcher:main"
 	}
-)
+))

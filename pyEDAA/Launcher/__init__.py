@@ -61,7 +61,7 @@ class Program:
 	_projectFilePath: Path
 
 
-	def __init__(self, projectFilePath: Path):
+	def __init__(self, projectFilePath: Path) -> None:
 		"""Initializer.
 
 		:param projectFilePath: Path to the ``*.xpr`` file.
@@ -140,14 +140,14 @@ def main() -> NoReturn:
 	It creates an instance of :class:`Program` and hands over the execution to the OOP world.
 	"""
 	xilinxInstallationPath = Path.cwd()
-	script_path = Path(argv[0])
+	scriptPath = Path(argv[0])
 
-	if len(argv) == 0:
-		Program.PrintHelp(script_path)
+	if (argc := len(argv)) == 0:
+		Program.PrintHelp(scriptPath)
 
-		print(f"Current path '{xilinxInstallationPath}' has following folders in it:")
+		print(f"Current path '{xilinxInstallationPath}' contains the following folders:")
 		for version in Program.GetVivadoVersions(xilinxInstallationPath):
-			print(version)
+			print(f"* {version}")
 
 		print("")
 		print("Press any key to exit.")
@@ -156,7 +156,7 @@ def main() -> NoReturn:
 		input()
 		exit(0)
 
-	elif len(argv) == 1:
+	elif argc == 1:
 		projectFileArgument = argv[1]
 		projectFilePath = Path(projectFileArgument)
 

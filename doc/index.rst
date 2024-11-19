@@ -105,9 +105,9 @@ News
 Contributors
 ************
 
-* `Patrick Lehmann <https://GitHub.com/Paebbels>`__ (Maintainer)
-* `Stefan Unrein <https://GitHub.com/stefanunrein/>`__
-* `Unai Martinez-Corral <https://GitHub.com/umarcor/>`__
+* :gh:`Patrick Lehmann <Paebbels>` (Maintainer)
+* :gh:`Stefan Unrein <stefanunrein>` (Author)
+* :gh:`Unai Martinez-Corral <umarcor>`
 * `and more... <https://GitHub.com/VHDL/pyVHDLModel/graphs/contributors>`__
 
 
@@ -125,14 +125,6 @@ License
 
    This Python package (source code) is licensed under **Apache License 2.0**. |br|
    The accompanying documentation is licensed under **Creative Commons - Attribution 4.0 (CC-BY 4.0)**.
-
-------------------------------------
-
-.. |docdate| date:: %d.%b %Y - %H:%M
-
-.. only:: html
-
-   This document was generated on |docdate|.
 
 
 .. toctree::
@@ -163,14 +155,19 @@ License
 
 .. raw:: latex
 
-   \part{References}
+   \part{References and Reports}
 
 .. toctree::
-   :caption: References
+   :caption: References and Reports
    :hidden:
 
-   pyEDAA.Launcher/index
+   Python Class Reference <pyEDAA.Launcher/pyEDAA.Launcher>
+   unittests/index
+   coverage/index
+   Doc. Coverage Report <DocCoverage>
+   Static Type Check Report ➚ <typing/index>
 
+.. Coverage Report ➚ <coverage/index>
 
 .. raw:: latex
 
@@ -180,12 +177,9 @@ License
    :caption: Appendix
    :hidden:
 
-   Coverage Report ➚ <coverage/index>
-   Static Type Check Report ➚ <typing/index>
    License
    Doc-License
    Glossary
    genindex
-
-.. #
-   py-modindex
+   Python Module Index <modindex>
+   TODO

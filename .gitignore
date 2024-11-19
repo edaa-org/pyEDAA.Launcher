@@ -6,12 +6,17 @@ __pycache__/
 .coverage
 .cov
 coverage.xml
+/report/coverage
+
+# mypy
+/report/typing
+
+# pytest
+/report/unit
 
 # setuptools
 /build/**/*.*
 /dist/**/*.*
-!/dist/*.cmd
-!/dist/*.ico
 /*.egg-info
 
 # Dependencies
@@ -23,5 +28,8 @@ coverage.xml
 /doc/pyEDAA.Launcher/**/*.*
 !/doc/pyEDAA.Launcher/index.rst
 
-# PyCharm project
+# PyCharm project files
 /.idea/workspace.xml
+
+# Git files
+!.git*

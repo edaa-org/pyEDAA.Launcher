@@ -37,7 +37,7 @@ from pyEDAA.Launcher import Program
 
 class ReadXPRFile(TestCase):
 	def test_ExtractVersionFromXPRFile(self) -> None:
-		xprFilePath = Path("StopWatch.xpr")
+		xprFilePath = Path("tests/StopWatch.xpr")
 		program = Program(xprFilePath)
 		version = program.GetVersion()
 
