@@ -34,7 +34,7 @@ The pyEDAA.Launcher Documentation
 If no suitable version was found, an error message is shown.
 
 
-.. _goals:
+.. _GOALS:
 
 Main Goals
 **********
@@ -70,7 +70,7 @@ journal files to the correct locations.
    * Handle multiple parallel Xilinx Vivado installations.
 
 
-.. _news:
+.. _NEWS:
 
 News
 ****
