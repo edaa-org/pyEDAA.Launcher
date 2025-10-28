@@ -9,10 +9,17 @@ on:
 
 jobs:
   Pipeline:
-    uses: pyTooling/Actions/.github/workflows/CompletePipeline.yml@r2
+    uses: pyTooling/Actions/.github/workflows/CompletePipeline.yml@r6
     with:
-      package_namespace: pyEDAA
-      package_name: Launcher
+      package_namespace: 'pyEDAA'
+      package_name:      'Launcher'
+      bandit:            'true'
+      pylint:            'false'
+      codecov:           'true'
+      codacy:            'true'
+      dorny:             'true'
+      cleanup:           'false'
     secrets:
-      PYPI_TOKEN:           ${{ secrets.PYPI_TOKEN }}
-      CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
+      PYPI_TOKEN:    ${{ secrets.PYPI_TOKEN }}
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      CODACY_TOKEN:  ${{ secrets.CODACY_TOKEN }}
