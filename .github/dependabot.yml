@@ -8,10 +8,6 @@ updates:
       prefix: "[Dependabot]"
     labels:
       - Dependencies
-    reviewers:
-      - Paebbels
-      - Umarcor
-      - StefanUnrein
     schedule:
       interval: "daily"    # Checks on Monday trough Friday.
 
@@ -23,8 +19,5 @@ updates:
       prefix: "[Dependabot]"
     labels:
       - Dependencies
-    reviewers:
-      - Paebbels
-      - Umarcor
     schedule:
       interval: "weekly"

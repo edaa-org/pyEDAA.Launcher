@@ -39,19 +39,21 @@ packageName =            "pyEDAA.Launcher"
 packageDirectory =       packageName.replace(".", "/")
 packageInformationFile = Path(f"{packageDirectory}/__init__.py")
 
-setup(**DescribePythonPackageHostedOnGitHub(
-	packageName=packageName,
-	description="Start the correct Vivado Version based on version in '*.xpr' file.",
-	gitHubNamespace=gitHubNamespace,
-	sourceFileWithVersion=packageInformationFile,
-	developmentStatus="beta",
-	classifiers=list(DEFAULT_CLASSIFIERS) + [
-		"Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
-	],
-	dataFiles={
-		packageName: ["py.typed"]
-	},
-	consoleScripts={
-		"pyedaa-launcher": "pyEDAA.Launcher:main"
-	}
-))
+setup(
+	**DescribePythonPackageHostedOnGitHub(
+		packageName=packageName,
+		description="Start the correct Vivado Version based on version in '*.xpr' file.",
+		gitHubNamespace=gitHubNamespace,
+		sourceFileWithVersion=packageInformationFile,
+		developmentStatus="beta",
+		classifiers=list(DEFAULT_CLASSIFIERS) + [
+			"Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
+		],
+		dataFiles={
+			packageName: ["py.typed"]
+		},
+		consoleScripts={
+			"pyedaa-launcher": "pyEDAA.Launcher:main"
+		}
+	)
+)

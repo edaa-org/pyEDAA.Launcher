@@ -34,17 +34,16 @@ __author__ =    "Stefan Unrein"
 __email__ =     "stefan.unrein@gmx.net"
 __copyright__ = "2021-2025, Stefan Unrein"
 __license__ =   "Apache License, Version 2.0"
-__version__ =   "0.1.0"
+__version__ =   "0.2.0"
 __keywords__ =  ["launcher", "version selector", "xilinx", "vivado"]
 
-from re import compile as re_compile
-
-from sys import exit, argv
-import subprocess
-from pathlib import Path
-from textwrap import dedent
-from time import sleep
-from typing import NoReturn, Generator
+from re         import compile as re_compile
+from sys        import exit, argv
+from subprocess import Popen
+from pathlib    import Path
+from textwrap   import dedent
+from time       import sleep
+from typing     import NoReturn, Generator
 
 from pyTooling.Decorators import export
 
@@ -59,7 +58,6 @@ class Program:
 	versionLineRegExp = re_compile(r"^<!--\s*Product\sVersion:\s+Vivado\s+v(?P<major>\d+).(?P<minor>\d+)(?:.(?P<patch>\d+))?\s+\(64-bit\)\s+-->")
 
 	_projectFilePath: Path
-
 
 	def __init__(self, projectFilePath: Path) -> None:
 		"""Initializer.
@@ -110,7 +108,7 @@ class Program:
 		vivadoBatchfilePath = vivadoInstallationPath / self.vivadoBatchfile
 
 		cmd = [str(vvglWrapperPath), str(vivadoBatchfilePath), str(self._projectFilePath)]
-		subprocess.Popen(cmd, cwd=self._projectFilePath.parent)  # , creationflags=subprocess.DETACHED_PROCESS)
+		Popen(cmd, cwd=self._projectFilePath.parent)  # , creationflags=subprocess.DETACHED_PROCESS)
 
 		print("")
 		print(f"Opening project with Vivado {version}.")
