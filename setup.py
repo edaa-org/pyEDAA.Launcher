@@ -45,15 +45,16 @@ setup(
 		description="Start the correct Vivado Version based on version in '*.xpr' file.",
 		gitHubNamespace=gitHubNamespace,
 		sourceFileWithVersion=packageInformationFile,
-		developmentStatus="beta",
 		classifiers=list(DEFAULT_CLASSIFIERS) + [
 			"Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
 		],
-		dataFiles={
-			packageName: ["py.typed"]
-		},
+		developmentStatus="beta",
+		pythonVersions=("3.11", "3.12", "3.13", "3.14"),
 		consoleScripts={
 			"pyedaa-launcher": "pyEDAA.Launcher:main"
+		},
+		dataFiles={
+			packageName: ["py.typed"]
 		}
 	)
 )
