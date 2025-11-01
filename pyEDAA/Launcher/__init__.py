@@ -30,33 +30,35 @@
 # ==================================================================================================================== #
 #
 """Start the correct Vivado Version based on version in `*.xpr`file."""
-__author__ =    "Stefan Unrein"
-__email__ =     "stefan.unrein@gmx.net"
+__author__ =    "Stefan Unrein, Patrick Lehmann"
+__email__ =     "paebbels@gmail.com"
 __copyright__ = "2021-2025, Stefan Unrein"
 __license__ =   "Apache License, Version 2.0"
 __version__ =   "0.2.0"
-__keywords__ =  ["launcher", "version selector", "xilinx", "vivado"]
+__keywords__ =  ["launcher", "version selector", "amd", "xilinx", "vivado"]
 
-from re         import compile as re_compile
-from sys        import exit, argv
-from subprocess import Popen
+from colorama   import init as colorama_init, Fore as Foreground
 from pathlib    import Path
+from re         import compile as re_compile
+from subprocess import Popen, DETACHED_PROCESS, CREATE_NEW_PROCESS_GROUP
+from sys        import exit, argv, stdout
 from textwrap   import dedent
 from time       import sleep
-from typing import NoReturn, Generator, Tuple
+from typing     import NoReturn, Generator, Tuple
 
 from pyTooling.Decorators import export
+from pyTooling.Versioning import YearReleaseVersion
 
 
 @export
 class Program:
 	"""Program instance of pyEDAA.Launcher."""
 
-	vivadoBatchfile = Path("bin/vivado.bat")
-	vvglWrapperFile = Path("bin/unwrapped/win64.o/vvgl.exe")
+	_vivadoBatchfile = Path("bin/vivado.bat")
+	_vvglWrapperFile = Path("bin/unwrapped/win64.o/vvgl.exe")
 
-	__vivadoVersion =     re_compile(r"\d+\.\d+(\.\d+)?")
-	versionLineRegExp = re_compile(r"^<!--\s*Product\sVersion:\s+Vivado\s+v(?P<major>\d+).(?P<minor>\d+)(?:.(?P<patch>\d+))?\s+\(64-bit\)\s+-->")
+	_vivadoVersionPattern = re_compile(r"\d+\.\d+(\.\d+)?")
+	_versionLinePattern =   re_compile(r"^<!--\s*Product\sVersion:\s+Vivado\s+v(?P<major>\d+).(?P<minor>\d+)(?:.(?P<patch>\d+))?\s+\(64-bit\)\s+-->")
 
 	_projectFilePath: Path
 
@@ -64,7 +66,7 @@ class Program:
 		"""Initializer.
 
 		:param projectFilePath: Path to the ``*.xpr`` file.
-		:raises Exception: When the given ``*.xpr`` file doesn't exist.
+		:raises Exception:      When the given ``*.xpr`` file doesn't exist.
 		"""
 		if not projectFilePath.exists():
 			raise Exception(f"Vivado project file '{projectFilePath}' not found.") \
@@ -72,22 +74,22 @@ class Program:
 
 		self._projectFilePath = projectFilePath
 
-	def GetVersion(self) -> str:
+	def GetVersion(self) -> YearReleaseVersion:
 		"""Opens an ``*.xpr`` file and returns the Vivado version used to save this file.
 
-		:returns: Used Vivado version to save the given ``*.xpr`` file.
+		:returns:          Used Vivado version to save the given ``*.xpr`` file.
 		:raises Exception: When the version information isn't found in the file.
 		"""
 		with self._projectFilePath.open("r", encoding="utf-8") as file:
 			for line in file:
-				match = self.versionLineRegExp.match(line)
+				match = self._versionLinePattern.match(line)
 				if match is not None:
-					return f"{match['major']}.{match['minor']}"
+					return YearReleaseVersion(year=int(match['major']), release=int(match['minor']))
 			else:
 				raise Exception(f"Pattern not found in '{self._projectFilePath}'.")
 
 	@classmethod
-	def GetVivadoVersions(cls, xilinxInstallPath: Path) -> Generator[Tuple[str, Path], None, None]:
+	def GetVivadoVersions(cls, xilinxInstallPath: Path) -> Generator[Tuple[YearReleaseVersion, Path], None, None]:
 		"""Scan a given directory for installed Vivado versions.
 
 		:param xilinxInstallPath: Xilinx installation directory.
@@ -97,42 +99,82 @@ class Program:
 			if directory.is_dir():
 				if directory.name == "Vivado":
 					for version in directory.iterdir():
-						if cls.__vivadoVersion.match(version.name):
-							yield version.name, version
-				elif cls.__vivadoVersion.match(directory.name):
-					yield directory.name, directory / "Vivado"
+						if cls._vivadoVersionPattern.match(version.name):
+							yield YearReleaseVersion.Parse(version.name), version
+				elif cls._vivadoVersionPattern.match(directory.name):
+					yield YearReleaseVersion.Parse(directory.name), directory / "Vivado"
 
-	def StartVivado(self, vivadoInstallationPath: Path, version: str) -> NoReturn:
+	def StartVivado(self, vivadoInstallationPath: Path) -> None:
 		"""Start the given Vivado version with an ``*.xpr`` file as parameter.
 
 		:param vivadoInstallationPath: Path to the Xilinx toolchain installations.
 		:param version: The Vivado version to start.
 		"""
-		vvglWrapperPath = vivadoInstallationPath / self.vvglWrapperFile
-		vivadoBatchfilePath = vivadoInstallationPath / self.vivadoBatchfile
+		vvglWrapperPath =     vivadoInstallationPath / self._vvglWrapperFile
+		vivadoBatchfilePath = vivadoInstallationPath / self._vivadoBatchfile
 
 		cmd = [str(vvglWrapperPath), str(vivadoBatchfilePath), str(self._projectFilePath)]
-		Popen(cmd, cwd=self._projectFilePath.parent)  # , creationflags=subprocess.DETACHED_PROCESS)
+		Popen(cmd, cwd=self._projectFilePath.parent, close_fds=True, creationflags=DETACHED_PROCESS | CREATE_NEW_PROCESS_GROUP)
 
-		print("")
-		print(f"Opening project with Vivado {version}.")
 
-		sleep(2)
-		exit(0)
+def printHeadline() -> None:
+	print(f"{Foreground.MAGENTA}{'=' * 80}{Foreground.RESET}")
+	print(f"{Foreground.MAGENTA}{'pyEDAA.Launcher':^80}{Foreground.RESET}")
+	print(f"{Foreground.MAGENTA}{'=' * 80}{Foreground.RESET}")
 
-	@classmethod
-	def PrintHelp(cls, scriptPath: Path) -> None:
-		"""Print a help page.
 
-		:param scriptPath: Path to this script.
-		"""
-		print(dedent(f"""\
-			Run-Path '{scriptPath}'
+def printVersion() -> None:
+	print(f"Author:    {__author__} ({__email__})")
+	print(f"Copyright: {__copyright__}")
+	print(f"License:   {__license__}")
+	print(f"Version:   {__version__}")
 
-			For using this Launcher, please bind the *.xpr file extension to this executable with:
-			* Put this executable into the Vivado installation folder. E.g: C:\\Xilinx\\Vivado\\
-			* Change *.xpr association: right-click -> open with -> VivadoManager.exe
-		"""))
+
+def printCLIOptions() -> None:
+	print(f"{Foreground.LIGHTBLUE_EX}Accepted argument:{Foreground.RESET}")
+	print("  <path to xpr file>   AMD/Xilinx Vivado project file")
+	print()
+	print(f"{Foreground.LIGHTBLUE_EX}Accepted options:{Foreground.RESET}")
+	print("  --help               Show a help page.")
+	print("  --version            Show tool version.")
+	print("  --list               List available Vivado versions.")
+
+
+def printSetup(scriptPath: Path) -> None:
+	"""
+	Print how to setup pyEDAA-Launcher.
+
+	:param scriptPath: Path to this script.
+	"""
+	print(dedent(f"""\
+		For using this {scriptPath.stem}, please associate the '*.xpr' file extension to
+		this executable.
+
+		{Foreground.LIGHTBLUE_EX}Setup steps:{Foreground.RESET}
+		* Copy this executable into the Xilinx installation directory.
+		  Example: C:\\Xilinx\\
+		* Set '*.xpr' file association:
+		  1. right-click on any existing '*.xrp' file in Windows Explorer
+		  2. open with
+		  3. {scriptPath}""")
+		)
+
+
+def printAvailableVivadoVersions(xilinxInstallationPath: Path) -> None:
+	print(dedent(f"""\
+		{Foreground.LIGHTBLACK_EX}Detecting Vivado installations in Xilinx installation directory '{xilinxInstallationPath}' ...{Foreground.RESET}
+
+		{Foreground.LIGHTBLUE_EX}Detected Vivado versions:{Foreground.RESET}""")
+	)
+	for version, installDirectory in Program.GetVivadoVersions(xilinxInstallationPath):
+		print(f"* {Foreground.GREEN}{version}{Foreground.RESET}  -> {installDirectory}")
+
+
+def waitForAnyKeyAndExit(exitCode: int = 0) -> NoReturn:
+	print()
+	print(f"{Foreground.CYAN}Press any key to exit.{Foreground.RESET}")
+	input()  # wait on user interaction
+	exit(exitCode)
 
 
 @export
@@ -141,49 +183,79 @@ def main() -> NoReturn:
 
 	It creates an instance of :class:`Program` and hands over the execution to the OOP world.
 	"""
-	xilinxInstallationPath = Path.cwd()
+	colorama_init()
+
 	scriptPath = Path(argv[0])
+	xilinxInstallationDirectory = scriptPath.parent
 
+	printHeadline()
 	if (argc := len(argv)) == 1:
-		Program.PrintHelp(scriptPath)
-
-		print(f"Current path '{xilinxInstallationPath}' contains the following folders:")
-		for version, installDirectory in Program.GetVivadoVersions(xilinxInstallationPath):
-			print(f"* {version} ({installDirectory})")
-
-		print("")
-		print("Press any key to exit.")
-
-		# wait on user interaction
-		input()
-		exit(0)
-
+		printVersion()
+		print()
+		print(f"{Foreground.RED}[ERROR] No argument or option provided.{Foreground.RESET}")
+		print()
+		printSetup(scriptPath)
+		print()
+		printAvailableVivadoVersions(xilinxInstallationDirectory)
+		print()
+		printCLIOptions()
+		waitForAnyKeyAndExit(2)
 	elif argc == 2:
-		projectFileArgument = argv[1]
-		projectFilePath = Path(projectFileArgument)
-
-		program = Program(projectFilePath)
-
-		try:
-			versionFromXPRFile = program.GetVersion()
-		except Exception as ex:
-			print(f"[ERROR] {ex}")
-			exit(1)
-
-		for version, installDirectory in program.GetVivadoVersions(xilinxInstallationPath):
-			if version == versionFromXPRFile:
-				program.StartVivado(installDirectory, versionFromXPRFile)
-		else:
-			vivadoPath = xilinxInstallationPath / versionFromXPRFile
+		if (option := argv[1]) == "--help":
 			print(dedent(f"""\
-				ERROR: Vivado version {versionFromXPRFile} not available at path '{vivadoPath}'. Please start manually!
+				{scriptPath.stem} launches the matching Vivado installation based on the Vivado
+				version used to save an '*.xpr' file""")
+						)
+			print()
+			printCLIOptions()
+			exit(0)
+		elif option == "--version":
+			printVersion()
+			exit(0)
+		elif option == "--list":
+			printAvailableVivadoVersions(xilinxInstallationDirectory)
+			exit(0)
+		else:
+			try:
+				program = Program(Path(option))
+				versionFromXPRFile = program.GetVersion()
 
-				Press any key to exit.
-			"""))
+				for version, vivadoInstallationDirectory in program.GetVivadoVersions(xilinxInstallationDirectory):
+					if version == versionFromXPRFile:
+						print(f"Using Vivado {Foreground.GREEN}{version}{Foreground.RESET} to open '{program._projectFilePath.parent.as_posix()}/{Foreground.CYAN}{program._projectFilePath.name}{Foreground.RESET}'.")
+						print()
+						program.StartVivado(vivadoInstallationDirectory)
 
-			# wait on user interaction
-			input()
-			exit(1)
+						i = 3
+						print(f"Closing in {i}", end="")
+						stdout.flush()
+						for i in range(i - 1, 0, -1):
+							sleep(1)
+							print(f"\x1b[1D{i}", end="")
+							stdout.flush()
+						sleep(1)
+						print()
+						exit(0)
+				else:
+					print(dedent(f"""\
+						{Foreground.RED}[ERROR] Vivado version {versionFromXPRFile} not available.{Foreground.RESET}
+
+						Please start manually!""")
+					)
+					printAvailableVivadoVersions(xilinxInstallationDirectory)
+					waitForAnyKeyAndExit(2)
+
+			except Exception as ex:
+				print(f"{Foreground.RED}[ERROR]    {ex}{Foreground.RESET}")
+				if ex.__cause__ is not None:
+					print(f"{Foreground.YELLOW}Caused by: {ex.__cause__}{Foreground.RESET}")
+				waitForAnyKeyAndExit(1)
+	else:
+		printHeadline()
+		print(f"{Foreground.RED}[ERROR] Too many arguments.{Foreground.RESET}")
+		print()
+		printCLIOptions()
+		waitForAnyKeyAndExit(2)
 
 
 # Entry point
