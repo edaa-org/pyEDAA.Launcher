@@ -43,7 +43,7 @@ from subprocess import Popen
 from pathlib    import Path
 from textwrap   import dedent
 from time       import sleep
-from typing     import NoReturn, Generator
+from typing import NoReturn, Generator, Tuple
 
 from pyTooling.Decorators import export
 
@@ -55,6 +55,7 @@ class Program:
 	vivadoBatchfile = Path("bin/vivado.bat")
 	vvglWrapperFile = Path("bin/unwrapped/win64.o/vvgl.exe")
 
+	__vivadoVersion =     re_compile(r"\d+\.\d+(\.\d+)?")
 	versionLineRegExp = re_compile(r"^<!--\s*Product\sVersion:\s+Vivado\s+v(?P<major>\d+).(?P<minor>\d+)(?:.(?P<patch>\d+))?\s+\(64-bit\)\s+-->")
 
 	_projectFilePath: Path
@@ -86,24 +87,27 @@ class Program:
 				raise Exception(f"Pattern not found in '{self._projectFilePath}'.")
 
 	@classmethod
-	def GetVivadoVersions(self, installPath: Path) -> Generator[str, None, None]:
+	def GetVivadoVersions(cls, xilinxInstallPath: Path) -> Generator[Tuple[str, Path], None, None]:
 		"""Scan a given directory for installed Vivado versions.
 
-		:param installPath: Xilinx installation directory.
-		:returns: A generator for a sequence of installed Vivado versions.
+		:param xilinxInstallPath: Xilinx installation directory.
+		:returns:                 A generator for a sequence of installed Vivado versions.
 		"""
-		for item in installPath.iterdir():
-			if item.is_dir():
-				yield item.name
+		for directory in xilinxInstallPath.iterdir():
+			if directory.is_dir():
+				if directory.name == "Vivado":
+					for version in directory.iterdir():
+						if cls.__vivadoVersion.match(version.name):
+							yield version.name, version
+				elif cls.__vivadoVersion.match(directory.name):
+					yield directory.name, directory / "Vivado"
 
-	def StartVivado(self, xilinxInstallationPath: Path, version: str) -> NoReturn:
+	def StartVivado(self, vivadoInstallationPath: Path, version: str) -> NoReturn:
 		"""Start the given Vivado version with an ``*.xpr`` file as parameter.
 
-		:param xilinxInstallationPath: Path to the Xilinx toolchain installations.
+		:param vivadoInstallationPath: Path to the Xilinx toolchain installations.
 		:param version: The Vivado version to start.
 		"""
-		vivadoInstallationPath = xilinxInstallationPath / version
-
 		vvglWrapperPath = vivadoInstallationPath / self.vvglWrapperFile
 		vivadoBatchfilePath = vivadoInstallationPath / self.vivadoBatchfile
 
@@ -140,12 +144,12 @@ def main() -> NoReturn:
 	xilinxInstallationPath = Path.cwd()
 	scriptPath = Path(argv[0])
 
-	if (argc := len(argv)) == 0:
+	if (argc := len(argv)) == 1:
 		Program.PrintHelp(scriptPath)
 
 		print(f"Current path '{xilinxInstallationPath}' contains the following folders:")
-		for version in Program.GetVivadoVersions(xilinxInstallationPath):
-			print(f"* {version}")
+		for version, installDirectory in Program.GetVivadoVersions(xilinxInstallationPath):
+			print(f"* {version} ({installDirectory})")
 
 		print("")
 		print("Press any key to exit.")
@@ -154,7 +158,7 @@ def main() -> NoReturn:
 		input()
 		exit(0)
 
-	elif argc == 1:
+	elif argc == 2:
 		projectFileArgument = argv[1]
 		projectFilePath = Path(projectFileArgument)
 
@@ -166,9 +170,9 @@ def main() -> NoReturn:
 			print(f"[ERROR] {ex}")
 			exit(1)
 
-		for version in program.GetVivadoVersions(xilinxInstallationPath):
+		for version, installDirectory in program.GetVivadoVersions(xilinxInstallationPath):
 			if version == versionFromXPRFile:
-				program.StartVivado(xilinxInstallationPath, versionFromXPRFile)
+				program.StartVivado(installDirectory, versionFromXPRFile)
 		else:
 			vivadoPath = xilinxInstallationPath / versionFromXPRFile
 			print(dedent(f"""\

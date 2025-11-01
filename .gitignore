@@ -17,6 +17,9 @@ coverage.xml
 # setuptools
 /build/**/*.*
 /dist/**/*.*
+!/dist/build.cmd
+!/dist/requirements.txt
+!/dist/Vivado.ico
 /*.egg-info
 
 # Dependencies
