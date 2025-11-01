@@ -35,7 +35,7 @@ from unittest             import TestCase
 
 from pyTooling.Versioning import YearReleaseVersion
 
-from pyEDAA.Launcher import Program
+from pyEDAA.Launcher      import Program
 
 
 class VivadoInstallation(TestCase):

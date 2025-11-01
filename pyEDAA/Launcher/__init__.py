@@ -40,7 +40,7 @@ __keywords__ =  ["launcher", "version selector", "amd", "xilinx", "vivado"]
 from colorama   import init as colorama_init, Fore as Foreground
 from pathlib    import Path
 from re         import compile as re_compile
-from subprocess import Popen, DETACHED_PROCESS, CREATE_NEW_PROCESS_GROUP
+from subprocess import Popen
 from sys        import exit, argv, stdout
 from textwrap   import dedent
 from time       import sleep
@@ -114,7 +114,7 @@ class Program:
 		vivadoBatchfilePath = vivadoInstallationPath / self._vivadoBatchfile
 
 		cmd = [str(vvglWrapperPath), str(vivadoBatchfilePath), str(self._projectFilePath)]
-		Popen(cmd, cwd=self._projectFilePath.parent, close_fds=True, creationflags=DETACHED_PROCESS | CREATE_NEW_PROCESS_GROUP)
+		Popen(cmd, cwd=self._projectFilePath.parent)
 
 
 def printHeadline() -> None:
