@@ -30,9 +30,65 @@
 #
 """Unit tests for Vivado."""
 from pathlib              import Path
+from shutil               import rmtree
 from unittest             import TestCase
 
+from pyTooling.Versioning import YearReleaseVersion
+
 from pyEDAA.Launcher import Program
+
+
+class VivadoInstallation(TestCase):
+	_projectDirectory = Path.cwd()
+	_xilinxDirectory = _projectDirectory / "tests" / "xilinx"
+
+	@classmethod
+	def setUpClass(cls) -> None:
+		print()
+
+		installations = (
+			"Vivado/2023.1",
+			"Vivado/2023.2",
+			"Vivado/2024.1",
+			"2025.1/Vivado"
+		)
+		print(f"Creating '{cls._xilinxDirectory}' ... ", end="")
+		try:
+			cls._xilinxDirectory.mkdir(parents=True)
+			print("[ok]")
+		except FileExistsError:
+			print("[skip]")
+
+		for installation in installations:
+			installationDirectory = cls._xilinxDirectory / installation
+			print(f"  {installation}", end="")
+			try:
+				installationDirectory.mkdir(parents=True)
+				print("[ok]")
+			except FileExistsError:
+				print("[skip]")
+
+	@classmethod
+	def tearDownClass(cls) -> None:
+		print()
+		print(f"Removing '{cls._xilinxDirectory}' ... ", end="")
+		try:
+			rmtree(cls._xilinxDirectory)
+			print("[ok]")
+		except FileNotFoundError:
+			print("[skip]")
+
+	def test_Iterate(self) -> None:
+		expectedVersions = [
+			YearReleaseVersion(2023, 1),
+			YearReleaseVersion(2023, 2),
+			YearReleaseVersion(2024, 1),
+			YearReleaseVersion(2025, 1)
+		]
+		versions = [version for version, _ in Program.GetVivadoVersions(self._xilinxDirectory)]
+		versions.sort()
+
+		self.assertListEqual(expectedVersions, versions)
 
 
 class ReadXPRFile(TestCase):
