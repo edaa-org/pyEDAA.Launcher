@@ -117,20 +117,47 @@ class Program:
 		Popen(cmd, cwd=self._projectFilePath.parent)
 
 
+@export
 def printHeadline() -> None:
+	"""
+	Print the programs headline.
+
+	.. code-block::
+
+	   ================================================================================
+	                                   pyEDAA.Launcher
+	   ================================================================================
+
+	"""
 	print(f"{Foreground.MAGENTA}{'=' * 80}{Foreground.RESET}")
 	print(f"{Foreground.MAGENTA}{'pyEDAA.Launcher':^80}{Foreground.RESET}")
 	print(f"{Foreground.MAGENTA}{'=' * 80}{Foreground.RESET}")
 
 
+@export
 def printVersion() -> None:
+	"""
+	Print author(s), copyright notice, license and version.
+
+	.. code-block::
+
+	   Author:    Jane Doe
+	   Copyright: ....
+	   License:   MIT
+	   Version:   v2.1.4
+
+	"""
 	print(f"Author:    {__author__} ({__email__})")
 	print(f"Copyright: {__copyright__}")
 	print(f"License:   {__license__}")
 	print(f"Version:   {__version__}")
 
 
+@export
 def printCLIOptions() -> None:
+	"""
+	Print accepted CLI arguments and CLI options.
+	"""
 	print(f"{Foreground.LIGHTBLUE_EX}Accepted argument:{Foreground.RESET}")
 	print("  <path to xpr file>   AMD/Xilinx Vivado project file")
 	print()
@@ -140,9 +167,10 @@ def printCLIOptions() -> None:
 	print("  --list               List available Vivado versions.")
 
 
+@export
 def printSetup(scriptPath: Path) -> None:
 	"""
-	Print how to setup pyEDAA-Launcher.
+	Print how to setup pyEDAA.Launcher.
 
 	:param scriptPath: Path to this script.
 	"""
@@ -160,7 +188,13 @@ def printSetup(scriptPath: Path) -> None:
 		)
 
 
+@export
 def printAvailableVivadoVersions(xilinxInstallationPath: Path) -> None:
+	"""
+	Print a list of discovered Xilinx Vivado installations.
+
+	:param xilinxInstallationPath: Directory were Xilinx software is installed.
+	"""
 	print(dedent(f"""\
 		{Foreground.LIGHTBLACK_EX}Detecting Vivado installations in Xilinx installation directory '{xilinxInstallationPath}' ...{Foreground.RESET}
 
@@ -170,9 +204,15 @@ def printAvailableVivadoVersions(xilinxInstallationPath: Path) -> None:
 		print(f"* {Foreground.GREEN}{version}{Foreground.RESET}  -> {installDirectory}")
 
 
-def waitForAnyKeyAndExit(exitCode: int = 0) -> NoReturn:
+@export
+def waitForReturnKeyAndExit(exitCode: int = 0) -> NoReturn:
+	"""
+	Ask the user to press Return. Afterwards exit the program with ``exitcode``.
+
+	:param exitCode: Exit code when returning to caller.
+	"""
 	print()
-	print(f"{Foreground.CYAN}Press any key to exit.{Foreground.RESET}")
+	print(f"{Foreground.CYAN}Press Return to exit.{Foreground.RESET}")
 	input()  # wait on user interaction
 	exit(exitCode)
 
@@ -199,7 +239,7 @@ def main() -> NoReturn:
 		printAvailableVivadoVersions(xilinxInstallationDirectory)
 		print()
 		printCLIOptions()
-		waitForAnyKeyAndExit(2)
+		waitForReturnKeyAndExit(2)
 	elif argc == 2:
 		if (option := argv[1]) == "--help":
 			print(dedent(f"""\
@@ -243,19 +283,19 @@ def main() -> NoReturn:
 						Please start manually!""")
 					)
 					printAvailableVivadoVersions(xilinxInstallationDirectory)
-					waitForAnyKeyAndExit(2)
+					waitForReturnKeyAndExit(2)
 
 			except Exception as ex:
 				print(f"{Foreground.RED}[ERROR]    {ex}{Foreground.RESET}")
 				if ex.__cause__ is not None:
 					print(f"{Foreground.YELLOW}Caused by: {ex.__cause__}{Foreground.RESET}")
-				waitForAnyKeyAndExit(1)
+				waitForReturnKeyAndExit(1)
 	else:
 		printHeadline()
 		print(f"{Foreground.RED}[ERROR] Too many arguments.{Foreground.RESET}")
 		print()
 		printCLIOptions()
-		waitForAnyKeyAndExit(2)
+		waitForReturnKeyAndExit(2)
 
 
 # Entry point

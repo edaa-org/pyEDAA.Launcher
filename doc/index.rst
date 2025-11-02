@@ -77,6 +77,19 @@ News
 
 .. only:: html
 
+   Nov. 2025 - Reworked codebase and new CLI behavior
+   ==================================================
+
+.. only:: latex
+
+   .. rubric:: Reworked codebase and new CLI behavior
+
+* Reworked CLI interface (``--help``, ``--version``, ``--list``, colored)
+* Detect Vivado 2025.1 (changed directory layout in ``C:\Xilinx`` installation directory).
+
+
+.. only:: html
+
    Feb. 2022 - Documentation und Unit Test Enhancements
    ====================================================
 
