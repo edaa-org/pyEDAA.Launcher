@@ -11,7 +11,7 @@
 #                                                                                                                      #
 # License:                                                                                                             #
 # ==================================================================================================================== #
-# Copyright 2021-2024 Stefan Unrein - Endingen, Germany                                                                #
+# Copyright 2021-2025 Stefan Unrein - Endingen, Germany                                                                #
 #                                                                                                                      #
 # Licensed under the Apache License, Version 2.0 (the "License");                                                      #
 # you may not use this file except in compliance with the License.                                                     #
@@ -39,19 +39,22 @@ packageName =            "pyEDAA.Launcher"
 packageDirectory =       packageName.replace(".", "/")
 packageInformationFile = Path(f"{packageDirectory}/__init__.py")
 
-setup(**DescribePythonPackageHostedOnGitHub(
-	packageName=packageName,
-	description="Start the correct Vivado Version based on version in '*.xpr' file.",
-	gitHubNamespace=gitHubNamespace,
-	sourceFileWithVersion=packageInformationFile,
-	developmentStatus="beta",
-	classifiers=list(DEFAULT_CLASSIFIERS) + [
-		"Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
-	],
-	dataFiles={
-		packageName: ["py.typed"]
-	},
-	consoleScripts={
-		"pyedaa-launcher": "pyEDAA.Launcher:main"
-	}
-))
+setup(
+	**DescribePythonPackageHostedOnGitHub(
+		packageName=packageName,
+		description="Start the correct Vivado Version based on version in '*.xpr' file.",
+		gitHubNamespace=gitHubNamespace,
+		sourceFileWithVersion=packageInformationFile,
+		classifiers=list(DEFAULT_CLASSIFIERS) + [
+			"Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
+		],
+		developmentStatus="beta",
+		pythonVersions=("3.11", "3.12", "3.13", "3.14"),
+		consoleScripts={
+			"pyedaa-launcher": "pyEDAA.Launcher:main"
+		},
+		dataFiles={
+			packageName: ["py.typed"]
+		}
+	)
+)

@@ -19,6 +19,11 @@ coverage.xml
 /dist/**/*.*
 /*.egg-info
 
+# pyInstaller
+!/dist/build.cmd
+!/dist/requirements.txt
+!/dist/Vivado.ico
+
 # Dependencies
 !requirements.txt
 
@@ -26,7 +31,6 @@ coverage.xml
 /doc/_build/
 /doc/_theme/
 /doc/pyEDAA.Launcher/**/*.*
-!/doc/pyEDAA.Launcher/index.rst
 
 # PyCharm project files
 /.idea/workspace.xml

@@ -34,7 +34,7 @@ The pyEDAA.Launcher Documentation
 If no suitable version was found, an error message is shown.
 
 
-.. _goals:
+.. _GOALS:
 
 Main Goals
 **********
@@ -70,10 +70,23 @@ journal files to the correct locations.
    * Handle multiple parallel Xilinx Vivado installations.
 
 
-.. _news:
+.. _NEWS:
 
 News
 ****
+
+.. only:: html
+
+   Nov. 2025 - Reworked codebase and new CLI behavior
+   ==================================================
+
+.. only:: latex
+
+   .. rubric:: Reworked codebase and new CLI behavior
+
+* Reworked CLI interface (``--help``, ``--version``, ``--list``, colored)
+* Detect Vivado 2025.1 (changed directory layout in ``C:\Xilinx`` installation directory).
+
 
 .. only:: html
 
@@ -164,6 +177,7 @@ License
    Python Class Reference <pyEDAA.Launcher/pyEDAA.Launcher>
    unittests/index
    coverage/index
+   CodeCoverage
    Doc. Coverage Report <DocCoverage>
    Static Type Check Report ➚ <typing/index>
 

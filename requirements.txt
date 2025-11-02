@@ -1,1 +1,1 @@
-pyTooling ~= 8.0
+pyTooling[Terminal] ~= 8.7
