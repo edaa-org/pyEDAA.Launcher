@@ -34,7 +34,7 @@ __author__ =    "Stefan Unrein, Patrick Lehmann"
 __email__ =     "paebbels@gmail.com"
 __copyright__ = "2021-2026, Stefan Unrein"
 __license__ =   "Apache License, Version 2.0"
-__version__ =   "0.2.1"
+__version__ =   "0.2.2"
 __keywords__ =  ["launcher", "version selector", "amd", "xilinx", "vivado"]
 
 from colorama   import init as colorama_init, Fore as Foreground
