@@ -30,12 +30,15 @@
 # ==================================================================================================================== #
 #
 """Start the correct Vivado Version based on version in `*.xpr`file."""
-__author__ =    "Stefan Unrein, Patrick Lehmann"
-__email__ =     "paebbels@gmail.com"
-__copyright__ = "2021-2026, Stefan Unrein"
-__license__ =   "Apache License, Version 2.0"
-__version__ =   "0.2.2"
-__keywords__ =  ["launcher", "version selector", "amd", "xilinx", "vivado"]
+__author__ =            "Stefan Unrein, Patrick Lehmann"
+__email__ =             "Paebbels@gmail.com"
+__copyright__ =         "2021-2026, Stefan Unrein"
+__license__ =           "Apache License, Version 2.0"
+__version__ =           "0.2.3"
+__keywords__ =          ["launcher", "version selector", "amd", "xilinx", "vivado"]
+__project_url__ =       "https://github.com/edaa-org/pyEDAA.Launcher"
+__documentation_url__ = "https://edaa-org.github.io/pyEDAA.Launcher"
+__issue_tracker_url__ = "https://GitHub.com/edaa-org/pyEDAA.Launcher/issues"
 
 from colorama   import init as colorama_init, Fore as Foreground
 from pathlib    import Path
