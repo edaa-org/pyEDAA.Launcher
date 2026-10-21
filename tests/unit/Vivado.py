@@ -39,8 +39,8 @@ from pyEDAA.Launcher      import Program
 
 
 class VivadoInstallation(TestCase):
-	_projectDirectory = Path.cwd()
-	_xilinxDirectory = _projectDirectory / "tests" / "xilinx"
+	_PROJECT_DIRECTORY = Path.cwd()
+	_XILINX_DIRECTORY =  _PROJECT_DIRECTORY / "tests" / "xilinx"
 
 	@classmethod
 	def setUpClass(cls) -> None:
@@ -52,15 +52,15 @@ class VivadoInstallation(TestCase):
 			"Vivado/2024.1",
 			"2025.1/Vivado"
 		)
-		print(f"Creating '{cls._xilinxDirectory}' ... ", end="")
+		print(f"Creating '{cls._XILINX_DIRECTORY}' ... ", end="")
 		try:
-			cls._xilinxDirectory.mkdir(parents=True)
+			cls._XILINX_DIRECTORY.mkdir(parents=True)
 			print("[ok]")
 		except FileExistsError:
 			print("[skip]")
 
 		for installation in installations:
-			installationDirectory = cls._xilinxDirectory / installation
+			installationDirectory = cls._XILINX_DIRECTORY / installation
 			print(f"  {installation}", end="")
 			try:
 				installationDirectory.mkdir(parents=True)
@@ -71,9 +71,9 @@ class VivadoInstallation(TestCase):
 	@classmethod
 	def tearDownClass(cls) -> None:
 		print()
-		print(f"Removing '{cls._xilinxDirectory}' ... ", end="")
+		print(f"Removing '{cls._XILINX_DIRECTORY}' ... ", end="")
 		try:
-			rmtree(cls._xilinxDirectory)
+			rmtree(cls._XILINX_DIRECTORY)
 			print("[ok]")
 		except FileNotFoundError:
 			print("[skip]")
@@ -85,7 +85,7 @@ class VivadoInstallation(TestCase):
 			YearReleaseVersion(2024, 1),
 			YearReleaseVersion(2025, 1)
 		]
-		versions = [version for version, _ in Program.GetVivadoVersions(self._xilinxDirectory)]
+		versions = [version for version, _ in Program.GetVivadoVersions(self._XILINX_DIRECTORY)]
 		versions.sort()
 
 		self.assertListEqual(expectedVersions, versions)
