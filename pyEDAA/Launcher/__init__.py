@@ -57,11 +57,11 @@ from pyTooling.Versioning import YearReleaseVersion
 class Program:
 	"""Program instance of pyEDAA.Launcher."""
 
-	_vivadoBatchfile = Path("bin/vivado.bat")
-	_vvglWrapperFile = Path("bin/unwrapped/win64.o/vvgl.exe")
+	_VIVADO_BATCHFILE =  Path("bin/vivado.bat")
+	_VVGL_WRAPPER_FILE = Path("bin/unwrapped/win64.o/vvgl.exe")
 
-	_vivadoVersionPattern = re_compile(r"\d+\.\d+(\.\d+)?")
-	_versionLinePattern =   re_compile(r"^<!--\s*Product\sVersion:\s+Vivado\s+v(?P<major>\d+).(?P<minor>\d+)(?:.(?P<patch>\d+))?\s+\(64-bit\)\s+-->")
+	_VIVADO_VERSION_PATTERN = re_compile(r"\d+\.\d+(\.\d+)?")
+	_VERSION_LINE_PATTERN =   re_compile(r"^<!--\s*Product\sVersion:\s+Vivado\s+v(?P<major>\d+).(?P<minor>\d+)(?:.(?P<patch>\d+))?\s+\(64-bit\)\s+-->")
 
 	_projectFilePath: Path
 
@@ -85,7 +85,7 @@ class Program:
 		"""
 		with self._projectFilePath.open("r", encoding="utf-8") as file:
 			for line in file:
-				match = self._versionLinePattern.match(line)
+				match = self._VERSION_LINE_PATTERN.match(line)
 				if match is not None:
 					return YearReleaseVersion(year=int(match['major']), release=int(match['minor']))
 			else:
@@ -102,9 +102,9 @@ class Program:
 			if directory.is_dir():
 				if directory.name == "Vivado":
 					for version in directory.iterdir():
-						if cls._vivadoVersionPattern.match(version.name):
+						if cls._VIVADO_VERSION_PATTERN.match(version.name):
 							yield YearReleaseVersion.Parse(version.name), version
-				elif cls._vivadoVersionPattern.match(directory.name):
+				elif cls._VIVADO_VERSION_PATTERN.match(directory.name):
 					yield YearReleaseVersion.Parse(directory.name), directory / "Vivado"
 
 	def StartVivado(self, vivadoInstallationPath: Path) -> None:
@@ -113,8 +113,8 @@ class Program:
 		:param vivadoInstallationPath: Path to the Xilinx toolchain installations.
 		:param version: The Vivado version to start.
 		"""
-		vvglWrapperPath =     vivadoInstallationPath / self._vvglWrapperFile
-		vivadoBatchfilePath = vivadoInstallationPath / self._vivadoBatchfile
+		vvglWrapperPath =     vivadoInstallationPath / self._VVGL_WRAPPER_FILE
+		vivadoBatchfilePath = vivadoInstallationPath / self._VIVADO_BATCHFILE
 
 		cmd = [str(vvglWrapperPath), str(vivadoBatchfilePath), str(self._projectFilePath)]
 		Popen(cmd, cwd=self._projectFilePath.parent)
