@@ -1,1 +1,1 @@
-pyinstaller ~= 6.21
+pyinstaller ~= 6.22
