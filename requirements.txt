@@ -1,1 +1,1 @@
-pyTooling[Terminal] ~= 8.16
+pyTooling[terminal] >= 10.0.0, < 11.0
